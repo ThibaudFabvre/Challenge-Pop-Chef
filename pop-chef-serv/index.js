@@ -32,6 +32,18 @@ app.get('/products', async (req, res) => {
     }
 });
 
+app.get('/products/:id', async (req, res) => {
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const response = await conn.query(`SELECT * FROM products WHERE id = ${req.params.id}`);
+    return res.status(200).send(JSON.stringify(response));
+  } finally {
+    if (conn) conn.release();
+  }
+});
+
 
 app.post('/products', async (req, res) => {
 
