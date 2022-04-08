@@ -3,7 +3,7 @@ import './App.css';
 
 import { useAppDispatch, useAppSelector } from './app/hooks';
 
-import { addNewProduct, deleteProduct, fetchAllProducts, selectProducts } from './features/product/productSlice';
+import { addNewProduct, deleteProduct, fetchAllProducts, fetchProduct, selectProducts } from './features/product/productSlice';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
@@ -24,7 +24,7 @@ function App() {
   return (
     <div className="App">
       <form>
-        <span>ADD PRODUCT :</span>
+        <p>ADD PRODUCT :</p>
         <input type="text" placeholder='New Product Name' onChange={(e) => {setNewName(e.target.value)}}/>
         <input type="text" placeholder='New Product Description' onChange={(e) => {setNewDescription(e.target.value)}}/>
         <button type="submit" onClick={(e) => {
@@ -33,12 +33,12 @@ function App() {
         }}>Add</button>
       </form>
       {list.map(({name, id, description}, index) => (
-        <div style={{ display: 'flex', justifyContent: 'center'}}>
-          <div key={index+id} >
-            <p key={name+id}>{name}</p>
-            <p key={index+name+id}>{description}</p>
+        <div key={index+id+'wrapper'}  style={{ display: 'flex', justifyContent: 'center'}} onClick={() => {dispatch(fetchProduct({ id }))}}>
+          <div style={{ backgroundColor: '#4b6e3d', marginTop: 10 }} >
+            <button onClick={() => dispatch(deleteProduct({ id }))}>X</button>
+            <p>{name}</p>
+            <p>{description}</p>
           </div>
-          <button onClick={() => dispatch(deleteProduct({ id }))}>DELETE</button>
         </div>
       ))}
     </div>

@@ -11,6 +11,15 @@ export const fetchProducts = async ()  =>{
   }
 }
 
+export const fetchProductByID = async ({ id } : { id: number})  =>{
+  try {
+    const { data } = await axios.get(BASE_URL + `products/${id}`);
+    return data[0];
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 export const createNewProduct = async ({ name, description} : { name: string, description: string }) => {
 
   try {
@@ -30,3 +39,4 @@ export const deleteProductByID = async ({ id } : { id : number }) => {
     console.log(error);
   }
 }
+
