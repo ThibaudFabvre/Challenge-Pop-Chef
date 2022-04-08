@@ -1,4 +1,5 @@
 import axios from "axios";
+import { Product } from "./productSlice";
 const BASE_URL = 'http://localhost:3000/';
 
 
@@ -40,3 +41,14 @@ export const deleteProductByID = async ({ id } : { id : number }) => {
   }
 }
 
+export const updateProductByID = async ({ id, name, description } : Product) => {
+  try {
+    const { data } = await axios.put(BASE_URL + `products/${id}`, { name, description });
+    console.log('TODO');
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+updateProductByID({ id: 2, name: 'test', description: 'test' });
