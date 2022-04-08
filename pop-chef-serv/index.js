@@ -80,3 +80,24 @@ app.delete('/products/:id', async (req, res) => {
   }
 
 });
+
+
+app.put('/products/:id', async (req, res) => {
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    await conn.query(
+      `
+      UPDATE products SET 
+      name = '${req.body.name}', 
+      description = '${req.body.description}'
+      WHERE id = ${req.params.id}
+      `);
+    const response = await conn.query("SELECT * FROM products");
+    return res.status(200).send(JSON.stringify(response));
+  } finally {
+    if (conn) conn.release();
+  }
+
+});
