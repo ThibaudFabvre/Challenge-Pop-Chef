@@ -1,6 +1,6 @@
-import { Action, createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, } from '@reduxjs/toolkit';
 import { RootState, } from '../../app/store';
-import { fetchProducts } from './products.api';
+import {  fetchProducts } from './products.api';
 
 
 
@@ -15,6 +15,7 @@ export interface ProductState {
 
 const initialState: ProductState = {
   list: [],
+
 };
 
 
@@ -26,6 +27,8 @@ export const fetchAllProducts = createAsyncThunk(
   }
 );
 
+
+
 export const productSlice = createSlice({
   name: 'product',
   initialState,
@@ -34,10 +37,8 @@ export const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
-      action.payload?.productsList && state.list.push(...action.payload.productsList);
-      // state.list.push([]);
+      state.list = action?.payload?.productsList || [];
     });
-
   },
 });
 
