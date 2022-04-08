@@ -11,3 +11,12 @@ export const fetchProducts = async ()  =>{
   }
 }
 
+export const createNewProduct = async ({ name, description} : { name: string, description: string }) => {
+
+  try {
+    const { data } = await axios.post(BASE_URL + 'products', { name, description });
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+}
