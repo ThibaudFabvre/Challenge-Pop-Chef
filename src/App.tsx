@@ -3,7 +3,7 @@ import './App.css';
 
 import { useAppDispatch, useAppSelector } from './app/hooks';
 
-import { addNewProduct, fetchAllProducts, selectProducts } from './features/product/productSlice';
+import { addNewProduct, deleteProduct, fetchAllProducts, selectProducts } from './features/product/productSlice';
 import { useEffect } from 'react';
 import { useState } from 'react';
 
@@ -33,9 +33,12 @@ function App() {
         }}>Add</button>
       </form>
       {list.map(({name, id, description}, index) => (
-        <div key={index+id} >
-          <p key={name+id}>{name}</p>
-          <p key={index+name+id}>{description}</p>
+        <div style={{ display: 'flex', justifyContent: 'center'}}>
+          <div key={index+id} >
+            <p key={name+id}>{name}</p>
+            <p key={index+name+id}>{description}</p>
+          </div>
+          <button onClick={() => dispatch(deleteProduct({ id }))}>DELETE</button>
         </div>
       ))}
     </div>

@@ -20,3 +20,13 @@ export const createNewProduct = async ({ name, description} : { name: string, de
     console.log(error);
   }
 }
+
+
+export const deleteProductByID = async ({ id } : { id : number }) => {
+  try {
+    const { data } = await axios.delete(BASE_URL + `products/${id}`);
+    return { productsList: data};
+  } catch (error) {
+    console.log(error);
+  }
+}
