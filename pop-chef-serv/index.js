@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import mariadb from 'mariadb';
+import bodyParser from 'body-parser';
 
 const pool = mariadb.createPool({
     host: 'localhost',
@@ -11,6 +12,9 @@ const pool = mariadb.createPool({
 });
 const app = express();
 app.use(cors());
+app.use(bodyParser.json());
+
+
 
 app.get('/products', async (req, res) => {
 
@@ -22,6 +26,23 @@ app.get('/products', async (req, res) => {
     } finally {
       if (conn) conn.release(); //release to pool
     }
+});
+
+
+app.post('/products', async (req, res) => {
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    const response = await conn.query(
+      `
+      INSERT INTO products (name, description) 
+      VALUES ('${req.body.name}', '${req.body.description}')
+      `);
+    return res.status(200).send({ message: 'Successfully added product' });
+  } finally {
+    if (conn) conn.release(); //release to pool
+  }
 });
 
 app.listen(3000, () => {
