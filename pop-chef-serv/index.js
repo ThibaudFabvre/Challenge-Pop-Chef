@@ -15,6 +15,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 
+app.listen(3000, () => {
+  console.log('Application started on port 3000!');
+});
+
 
 app.get('/products', async (req, res) => {
 
@@ -24,7 +28,7 @@ app.get('/products', async (req, res) => {
       const response = await conn.query("SELECT * FROM products");
       return res.status(200).send(JSON.stringify(response));
     } finally {
-      if (conn) conn.release(); //release to pool
+      if (conn) conn.release();
     }
 });
 
@@ -34,18 +38,33 @@ app.post('/products', async (req, res) => {
   let conn;
   try {
     conn = await pool.getConnection();
-    const response = await conn.query(
+    await conn.query(
       `
       INSERT INTO products (name, description) 
       VALUES ('${req.body.name}', '${req.body.description}')
       `);
     return res.status(200).send({ message: 'Successfully added product' });
   } finally {
-    if (conn) conn.release(); //release to pool
+    if (conn) conn.release();
   }
 });
 
-app.listen(3000, () => {
-  console.log('Application started on port 3000!');
-});
 
+app.delete('/products/:id', async (req, res) => {
+
+  let conn;
+  try {
+    conn = await pool.getConnection();
+    await conn.query(
+      `
+      DELETE FROM products
+      WHERE id = ${req.params.id}
+      `);
+
+    const response = await conn.query("SELECT * FROM products");
+    return res.status(200).send(JSON.stringify(response));
+  } finally {
+    if (conn) conn.release();
+  }
+
+});
